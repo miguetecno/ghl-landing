@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GoHighLevel — Todo tu negocio en un solo lugar</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green:   #00E5A0;
+    --green2:  #00B87A;
+    --gold:    #F5C842;
+    --bg:      #09090E;
+    --bg2:     #0E0E18;
+    --card:    #111120;
+    --border:  rgba(0,229,160,0.12);
+    --white:   #FFFFFF;
+    --gray:    #8888AA;
+    --dgray:   #333348;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 30px rgba(0,229,160,0.3); }
+    50%       { box-shadow: 0 0 60px rgba(0,229,160,0.6); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50%       { transform: translateY(-8px); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  @keyframes gradMove {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .fade-up { animation: fadeUp 0.8s ease both; }
+  .delay-1 { animation-delay: 0.15s; }
+  .delay-2 { animation-delay: 0.3s; }
+  .delay-3 { animation-delay: 0.45s; }
+  .delay-4 { animation-delay: 0.6s; }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.35;
+  }
+
+  /* ── GLOW ORBS ── */
+  .orb {
+    position: absolute; border-radius: 50%;
+    filter: blur(80px); pointer-events: none; z-index: 0;
+  }
+  .orb-1 { width: 600px; height: 600px; background: rgba(0,180,120,0.12); top: -200px; right: -150px; }
+  .orb-2 { width: 400px; height: 400px; background: rgba(60,60,200,0.08); bottom: 100px; left: -100px; }
+  .orb-3 { width: 500px; height: 500px; background: rgba(0,180,120,0.08); top: 40%; left: 50%; transform: translateX(-50%); }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(9,9,14,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 20px;
+    color: var(--green); letter-spacing: -0.5px;
+  }
+  .nav-cta {
+    background: var(--green); color: #001a0e;
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 14px; padding: 10px 24px; border-radius: 100px;
+    text-decoration: none; transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .nav-cta:hover { background: #00ffb3; transform: translateY(-1px); }
+
+  /* ── SECTIONS ── */
+  section { position: relative; z-index: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 140px 24px 100px;
+    overflow: hidden;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(0,229,160,0.08);
+    border: 1px solid rgba(0,229,160,0.25);
+    color: var(--green); font-size: 13px; font-weight: 500;
+    padding: 8px 18px; border-radius: 100px;
+    margin-bottom: 32px; letter-spacing: 0.5px;
+  }
+  .hero-tag span { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: float 2s ease infinite; }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(44px, 7vw, 90px);
+    font-weight: 800; line-height: 1.0;
+    letter-spacing: -2px; margin-bottom: 28px;
+    max-width: 900px;
+  }
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--green), #00b8d4, var(--green));
+    background-size: 200% auto;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .hero-sub {
+    font-size: clamp(17px, 2vw, 22px); color: var(--gray);
+    max-width: 580px; line-height: 1.65; margin-bottom: 48px;
+    font-weight: 300;
+  }
+
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-bottom: 60px; }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--green); color: #001a0e;
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 17px; padding: 18px 40px; border-radius: 16px;
+    text-decoration: none; transition: all 0.25s;
+    animation: pulse-glow 3s ease infinite;
+    letter-spacing: 0.2px;
+  }
+  .btn-primary:hover { background: #00ffb3; transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,229,160,0.35); }
+  .btn-primary svg { flex-shrink: 0; }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--white);
+    font-family: 'Syne', sans-serif; font-weight: 600;
+    font-size: 16px; padding: 18px 32px; border-radius: 16px;
+    text-decoration: none; transition: all 0.25s;
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { border-color: rgba(0,229,160,0.4); background: rgba(0,229,160,0.05); transform: translateY(-2px); }
+
+  .hero-proof {
+    display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;
+    color: var(--gray); font-size: 14px;
+  }
+  .hero-proof span { display: flex; align-items: center; gap: 8px; }
+  .hero-proof svg { color: var(--green); }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 48px 24px;
+  }
+  .stats-inner {
+    max-width: 900px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0; text-align: center;
+  }
+  .stat {
+    padding: 0 20px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(36px, 5vw, 56px); font-weight: 800;
+    color: var(--green); line-height: 1; margin-bottom: 8px;
+  }
+  .stat-label { color: var(--gray); font-size: 15px; }
+
+  /* ── PROBLEMA ── */
+  .problema {
+    padding: 120px 24px;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .section-tag {
+    display: inline-block;
+    background: rgba(255,100,100,0.1);
+    border: 1px solid rgba(255,100,100,0.25);
+    color: #ff8888; font-size: 12px; font-weight: 600;
+    padding: 6px 16px; border-radius: 100px;
+    margin-bottom: 24px; letter-spacing: 1.5px; text-transform: uppercase;
+  }
+  .section-tag.green {
+    background: rgba(0,229,160,0.08);
+    border-color: rgba(0,229,160,0.25);
+    color: var(--green);
+  }
+  .section-tag.gold {
+    background: rgba(245,200,66,0.08);
+    border-color: rgba(245,200,66,0.25);
+    color: var(--gold);
+  }
+
+  .section-h {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 4.5vw, 56px);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -1.5px; margin-bottom: 16px;
+  }
+  .section-sub { color: var(--gray); font-size: 18px; line-height: 1.65; margin-bottom: 56px; max-width: 600px; }
+
+  .problema-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .problema-card {
+    background: rgba(30,14,14,0.6);
+    border: 1px solid rgba(255,100,100,0.12);
+    border-radius: 20px; padding: 28px 32px;
+    border-left: 3px solid rgba(255,100,100,0.5);
+    transition: all 0.3s;
+  }
+  .problema-card:hover { border-left-color: #ff6464; transform: translateX(4px); }
+  .problema-card h4 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 18px; margin-bottom: 8px;
+  }
+  .problema-card p { color: var(--gray); font-size: 15px; line-height: 1.6; }
+
+  .problema-closing {
+    margin-top: 32px;
+    background: rgba(40,14,14,0.8);
+    border: 1px solid rgba(255,100,100,0.3);
+    border-radius: 16px; padding: 24px 32px;
+    text-align: center;
+    color: rgba(255,180,180,0.9); font-size: 18px; font-weight: 500;
+  }
+
+  /* ── SOLUCIÓN ── */
+  .solucion {
+    padding: 120px 24px;
+    background: linear-gradient(180deg, transparent, rgba(0,30,20,0.3), transparent);
+  }
+  .solucion-inner { max-width: 1100px; margin: 0 auto; }
+
+  .ghl-card {
+    background: linear-gradient(135deg, rgba(0,40,28,0.9), rgba(0,20,15,0.9));
+    border: 2px solid var(--green);
+    border-radius: 28px; padding: 48px;
+    text-align: center; margin-bottom: 48px;
+    position: relative; overflow: hidden;
+  }
+  .ghl-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(0,229,160,0.12), transparent 70%);
+    pointer-events: none;
+  }
+  .ghl-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(48px, 8vw, 80px); font-weight: 800;
+    color: var(--green); letter-spacing: -2px;
+    margin-bottom: 12px; position: relative; z-index: 1;
+  }
+  .ghl-tagline {
+    color: var(--gray); font-size: 18px; margin-bottom: 32px; position: relative; z-index: 1;
+  }
+  .features-pills {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    margin-bottom: 40px; position: relative; z-index: 1;
+  }
+  .feat-pill {
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.25);
+    color: var(--green); font-size: 14px; font-weight: 500;
+    padding: 8px 20px; border-radius: 100px;
+    transition: all 0.2s;
+  }
+  .feat-pill:hover { background: rgba(0,229,160,0.2); transform: translateY(-2px); }
+
+  .price-box {
+    display: inline-block;
+    background: rgba(0,229,160,0.08);
+    border: 1.5px solid rgba(0,229,160,0.4);
+    border-radius: 20px; padding: 20px 48px;
+    position: relative; z-index: 1;
+  }
+  .price-main {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 52px); font-weight: 800;
+    color: var(--green); letter-spacing: -1px;
+  }
+  .price-sub { color: var(--gray); font-size: 14px; margin-top: 4px; }
+
+  /* ── BENEFICIOS ── */
+  .beneficios { padding: 0 24px 120px; }
+  .beneficios-inner { max-width: 1100px; margin: 0 auto; }
+  .beneficios-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+  }
+  .benefit-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 32px 28px;
+    transition: all 0.3s; position: relative; overflow: hidden;
+  }
+  .benefit-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .benefit-card:hover { border-color: rgba(0,229,160,0.3); transform: translateY(-4px); }
+  .benefit-card:hover::before { opacity: 1; }
+
+  .benefit-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: rgba(0,229,160,0.1);
+    border: 1px solid rgba(0,229,160,0.2);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px; color: var(--green); font-size: 22px;
+  }
+  .benefit-card h4 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 18px; margin-bottom: 10px;
+  }
+  .benefit-card p { color: var(--gray); font-size: 15px; line-height: 1.65; }
+
+  /* ── AUTONOMÍA ── */
+  .autonomia {
+    padding: 120px 24px;
+    background: linear-gradient(180deg, transparent, rgba(30,30,100,0.1), transparent);
+  }
+  .autonomia-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+  }
+  .autonomia-list { display: flex; flex-direction: column; gap: 16px; }
+  .auto-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 20px 24px;
+    background: rgba(14,16,28,0.8);
+    border: 1px solid rgba(100,110,255,0.15);
+    border-radius: 16px; border-left: 3px solid rgba(130,140,255,0.6);
+    transition: all 0.3s;
+  }
+  .auto-item:hover { border-left-color: #9aa5ff; transform: translateX(4px); }
+  .auto-dot {
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 10px; background: rgba(100,110,255,0.1);
+    border: 1px solid rgba(100,110,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    color: #9aa5ff; font-size: 16px; font-weight: 700;
+    font-family: 'Syne', sans-serif;
+  }
+  .auto-item h5 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 16px; margin-bottom: 4px;
+  }
+  .auto-item p { color: var(--gray); font-size: 14px; line-height: 1.55; }
+
+  .autonomia-visual {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 28px; padding: 40px;
+    text-align: center;
+  }
+  .big-statement {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(28px, 4vw, 48px); font-weight: 800;
+    line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px;
+  }
+  .big-statement em { font-style: normal; color: var(--green); }
+
+  /* ── INGRESOS ── */
+  .ingresos { padding: 0 24px 120px; }
+  .ingresos-inner { max-width: 1100px; margin: 0 auto; }
+  .ingresos-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px; margin-bottom: 32px;
+  }
+  .ingreso-card {
+    background: rgba(20,18,8,0.8);
+    border: 1px solid rgba(245,200,66,0.15);
+    border-radius: 20px; padding: 28px 24px;
+    border-left: 3px solid rgba(245,200,66,0.5);
+    transition: all 0.3s;
+  }
+  .ingreso-card:hover { border-left-color: var(--gold); transform: translateX(4px); }
+  .ingreso-card h4 {
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: 17px; margin-bottom: 8px;
+  }
+  .ingreso-card p { color: var(--gray); font-size: 14px; line-height: 1.6; }
+
+  .ingresos-closing {
+    background: rgba(40,36,0,0.6);
+    border: 1px solid rgba(245,200,66,0.3);
+    border-radius: 16px; padding: 24px 32px;
+    text-align: center; color: var(--gold);
+    font-family: 'Syne', sans-serif; font-weight: 700;
+    font-size: clamp(18px, 2.5vw, 24px);
+  }
+
+  /* ── CTA FINAL ── */
+  .cta-section {
+    padding: 120px 24px 140px;
+    text-align: center;
+    background: radial-gradient(ellipse at 50% 50%, rgba(0,180,120,0.1) 0%, transparent 70%);
+  }
+  .cta-inner { max-width: 720px; margin: 0 auto; }
+  .cta-section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(40px, 6vw, 76px); font-weight: 800;
+    line-height: 1.0; letter-spacing: -2px; margin-bottom: 20px;
+  }
+  .cta-section h2 span { color: var(--green); }
+  .cta-section p { color: var(--gray); font-size: 18px; margin-bottom: 48px; line-height: 1.6; }
+
+  .cta-value {
+    display: inline-block;
+    background: rgba(0,229,160,0.06);
+    border: 1px solid rgba(0,229,160,0.2);
+    border-radius: 14px; padding: 16px 32px;
+    color: var(--green); font-size: 15px; margin-bottom: 40px;
+    font-weight: 500;
+  }
+  .cta-value strong { font-family: 'Syne', sans-serif; font-size: 18px; }
+
+  .cta-btn-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+  .btn-huge {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--green); color: #001a0e;
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(18px, 2.5vw, 24px);
+    padding: 22px 56px; border-radius: 20px;
+    text-decoration: none; transition: all 0.25s;
+    animation: pulse-glow 3s ease infinite;
+    letter-spacing: -0.3px;
+  }
+  .btn-huge:hover { background: #00ffb3; transform: translateY(-4px); box-shadow: 0 24px 50px rgba(0,229,160,0.4); }
+
+  .cta-dm { color: var(--dgray); font-size: 15px; }
+  .cta-dm a { color: var(--gray); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 16px;
+    color: var(--dgray); font-size: 14px;
+  }
+  footer .foot-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 18px; color: var(--green);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .stats-inner { grid-template-columns: 1fr; gap: 32px; }
+    .stat { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 32px; }
+    .stat:last-child { border-bottom: none; }
+    .autonomia-inner { grid-template-columns: 1fr; gap: 48px; }
+    .ghl-card { padding: 32px 24px; }
+    footer { justify-content: center; text-align: center; }
+  }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">GoHighLevel</div>
+  <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="nav-cta">Probalo gratis →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="hero-tag fade-up"><span></span> Para emprendedores y freelancers</div>
+
+  <h1 class="fade-up delay-1">
+    Tu negocio puede<br>
+    funcionar solo,<br>
+    crecer y generar<br>
+    <em>mas ingresos.</em>
+  </h1>
+
+  <p class="hero-sub fade-up delay-2">
+    Todo desde una sola plataforma. Sin depender de nadie.<br>
+    Y tambien podes ofrecer servicios a tus clientes.
+  </p>
+
+  <div class="hero-btns fade-up delay-3">
+    <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="btn-primary">
+      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      Empeza gratis — 14 dias
+    </a>
+    <a href="#solucion" class="btn-secondary">Ver como funciona →</a>
+  </div>
+
+  <div class="hero-proof fade-up delay-4">
+    <span>
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      Sin contratos
+    </span>
+    <span>
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      14 dias gratis
+    </span>
+    <span>
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+      Todo en un solo lugar
+    </span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stats-inner">
+    <div class="stat">
+      <div class="stat-num">+60K</div>
+      <div class="stat-label">negocios usando GHL</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">$97</div>
+      <div class="stat-label">por mes, todo incluido</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">14</div>
+      <div class="stat-label">dias gratis para probarlo</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEMA -->
+<section class="problema">
+  <div class="orb orb-3" style="background:rgba(200,50,50,0.06)"></div>
+  <div class="section-tag reveal">El problema</div>
+  <h2 class="section-h reveal">Asi se ve tu negocio<br>hoy en dia.</h2>
+  <p class="section-sub reveal">Si te identicas con alguno de estos puntos, GoHighLevel fue hecho para vos.</p>
+
+  <div class="problema-grid reveal">
+    <div class="problema-card">
+      <h4>Pagas por varias cosas</h4>
+      <p>Y no todas se conectan entre si. Cada herramienta vive en su propio mundo.</p>
+    </div>
+    <div class="problema-card">
+      <h4>Perdes tiempo cambiando apps</h4>
+      <p>En vez de enfocarte en vender, pasas el dia navegando entre plataformas.</p>
+    </div>
+    <div class="problema-card">
+      <h4>Dependes de terceros</h4>
+      <p>Para cada parte de tu negocio necesitas una solucion diferente.</p>
+    </div>
+    <div class="problema-card">
+      <h4>Todo separado y desorganizado</h4>
+      <p>Clientes, pagos, agenda y marketing estan en lugares distintos.</p>
+    </div>
+    <div class="problema-card">
+      <h4>Escalar se hace complicado</h4>
+      <p>El sistema actual no te acompaña cuando el negocio crece.</p>
+    </div>
+    <div class="problema-card">
+      <h4>Tu negocio no crece como deberia</h4>
+      <p>Y la razon no sos vos — es que las herramientas no trabajan juntas.</p>
+    </div>
+  </div>
+
+  <div class="problema-closing reveal">
+    Y mientras tanto, tu negocio no crece como podria.
+  </div>
+</section>
+
+<!-- SOLUCIÓN -->
+<section class="solucion" id="solucion">
+  <div class="solucion-inner">
+    <div style="text-align:center; margin-bottom:48px;">
+      <div class="section-tag green reveal">La solucion</div>
+      <h2 class="section-h reveal">Todo lo que necesitas.<br><span style="color:var(--green)">En un solo lugar.</span></h2>
+      <p class="section-sub reveal" style="margin:0 auto;">GoHighLevel combina todo en una sola plataforma para que tu negocio funcione solo.</p>
+    </div>
+
+    <div class="ghl-card reveal">
+      <div class="ghl-logo">GoHighLevel</div>
+      <div class="ghl-tagline">La plataforma all-in-one para emprendedores y freelancers</div>
+      <div class="features-pills">
+        <span class="feat-pill">CRM</span>
+        <span class="feat-pill">Agenda de turnos</span>
+        <span class="feat-pill">Funnels</span>
+        <span class="feat-pill">Email marketing</span>
+        <span class="feat-pill">SMS</span>
+        <span class="feat-pill">Sitio web</span>
+        <span class="feat-pill">Automatizaciones</span>
+        <span class="feat-pill">Pagos</span>
+        <span class="feat-pill">Pipeline de ventas</span>
+        <span class="feat-pill">App movil</span>
+      </div>
+      <div class="price-box">
+        <div class="price-main">Todo por solo $97/mes</div>
+        <div class="price-sub">Sin contratos • 14 dias gratis para probarlo</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="beneficios">
+  <div class="beneficios-inner">
+    <div class="section-tag green reveal">Que logras</div>
+    <h2 class="section-h reveal">Esto es lo que cambia<br><span style="color:var(--green)">en tu negocio.</span></h2>
+    <p class="section-sub reveal">Resultados reales desde el primer dia.</p>
+
+    <div class="beneficios-grid reveal">
+      <div class="benefit-card">
+        <div class="benefit-icon">+</div>
+        <h4>Mas leads calificados</h4>
+        <p>Funnels y landing pages que capturan clientes las 24 horas, aunque no estes trabajando.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">A</div>
+        <h4>Negocio en piloto automatico</h4>
+        <p>Seguimientos, recordatorios y ventas funcionando solos. Menos operacion, mas resultados.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">$</div>
+        <h4>Menos gastos, mas margen</h4>
+        <p>Un solo pago mensual reemplaza todo lo que pagas por separado. La diferencia es ganancia pura.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">&gt;</div>
+        <h4>Clientes mejor atendidos</h4>
+        <p>Responde rapido, agenda facil y nunca pierdas un lead. Todo desde el celular.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">^</div>
+        <h4>Escala cuando quieras</h4>
+        <p>La plataforma crece con vos. No necesitas cambiar de sistema cuando tu negocio crece.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon">*</div>
+        <h4>Todo conectado</h4>
+        <p>CRM, agenda, marketing y pagos hablando entre si. Un solo lugar para gestionar todo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTONOMIA -->
+<section class="autonomia">
+  <div class="autonomia-inner">
+    <div>
+      <div class="section-tag reveal" style="background:rgba(100,110,255,0.08);border-color:rgba(100,110,255,0.25);color:#9aa5ff;">Tu independencia</div>
+      <h2 class="section-h reveal">Manejas todo<br>desde un solo lugar.<br><span style="color:var(--green)">Sin depender<br>de nadie.</span></h2>
+      <p class="section-sub reveal">Tu negocio en piloto automatico, vos enfocado en crecer.</p>
+      <div class="autonomia-list reveal">
+        <div class="auto-item">
+          <div class="auto-dot">1</div>
+          <div>
+            <h5>Tu negocio trabaja solo</h5>
+            <p>Seguimientos, recordatorios y ventas automatizadas sin que hagas nada.</p>
+          </div>
+        </div>
+        <div class="auto-item">
+          <div class="auto-dot">2</div>
+          <div>
+            <h5>Nunca pierdas un cliente</h5>
+            <p>El CRM centraliza todo — contactos, historial y estado de cada lead en un lugar.</p>
+          </div>
+        </div>
+        <div class="auto-item">
+          <div class="auto-dot">3</div>
+          <div>
+            <h5>Mas tiempo para lo que importa</h5>
+            <p>Menos operacion diaria, mas energia para estrategia y crecimiento real.</p>
+          </div>
+        </div>
+        <div class="auto-item">
+          <div class="auto-dot">4</div>
+          <div>
+            <h5>Escala sin cambiar de sistema</h5>
+            <p>La plataforma crece con vos, sin migraciones ni dolores de cabeza.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="autonomia-visual reveal">
+      <div class="big-statement">
+        Tu negocio<br>puede funcionar<br>solo, crecer y<br>generar<br><em>mas ingresos.</em>
+      </div>
+      <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="btn-primary" style="display:inline-flex;font-size:16px;padding:16px 32px;">
+        Empeza gratis →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- INGRESOS EXTRA -->
+<section class="ingresos">
+  <div class="ingresos-inner">
+    <div class="section-tag gold reveal">Genera mas ingresos</div>
+    <h2 class="section-h reveal">No necesitas ser experto.<br><span style="color:var(--green)">Solo necesitas GHL.</span></h2>
+    <p class="section-sub reveal">Ofrece estos servicios a tus clientes y cobra lo que quieras:</p>
+
+    <div class="ingresos-grid reveal">
+      <div class="ingreso-card">
+        <h4>Sitios web profesionales</h4>
+        <p>Entregados en dias, no en semanas.</p>
+      </div>
+      <div class="ingreso-card">
+        <h4>Landing pages</h4>
+        <p>Para cualquier negocio o producto.</p>
+      </div>
+      <div class="ingreso-card">
+        <h4>Tiendas online</h4>
+        <p>E-commerce listo para vender.</p>
+      </div>
+      <div class="ingreso-card">
+        <h4>Automatizaciones</h4>
+        <p>Seguimientos y ventas en piloto automatico.</p>
+      </div>
+      <div class="ingreso-card">
+        <h4>Gestion de clientes (CRM)</h4>
+        <p>El sistema que todo negocio necesita.</p>
+      </div>
+    </div>
+
+    <div class="ingresos-closing reveal">
+      GHL te da la herramienta. Vos pones el precio.
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-section">
+  <div class="cta-inner">
+    <h2 class="reveal">14 dias<br><span>GRATIS</span><br>para probarlo.</h2>
+    <p class="reveal">Sin contratos. Sin sorpresas. Todo lo que necesitas para crecer en un solo lugar.</p>
+
+    <div class="cta-value reveal">
+      <strong>Todo tu negocio + ingresos extra = $97/mes</strong>
+    </div>
+
+    <div class="cta-btn-wrap reveal">
+      <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="btn-huge">
+        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Empeza gratis ahora
+      </a>
+      <div class="cta-dm">Tenes dudas? <a href="https://instagram.com" target="_blank">Escribime por DM</a> — respondo rapido.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">GoHighLevel</div>
+  <div>Enlace de afiliado — resultados pueden variar</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
