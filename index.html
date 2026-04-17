@@ -3,800 +3,421 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GoHighLevel — Todo tu negocio en un solo lugar</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>GoHighLevel — Tu negocio + ingresos extra en un solo lugar</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green:   #00E5A0;
-    --green2:  #00B87A;
-    --gold:    #F5C842;
-    --bg:      #09090E;
-    --bg2:     #0E0E18;
-    --card:    #111120;
-    --border:  rgba(0,229,160,0.12);
-    --white:   #FFFFFF;
-    --gray:    #8888AA;
-    --dgray:   #333348;
+    --green:#00E5A0; --green2:#00B87A; --gold:#F5C842; --blue:#8899FF;
+    --bg:#09090E; --bg2:#0D0D18; --card:#111120; --border:rgba(0,229,160,0.12);
+    --white:#FFFFFF; --gray:#8888AA; --dgray:#333348;
   }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes glow{0%,100%{box-shadow:0 0 28px rgba(0,229,160,.3)}50%{box-shadow:0 0 55px rgba(0,229,160,.65)}}
+  @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  @keyframes goldglow{0%,100%{box-shadow:0 0 28px rgba(245,200,66,.25)}50%{box-shadow:0 0 55px rgba(245,200,66,.55)}}
 
-  html { scroll-behavior: smooth; }
+  .fade-up{animation:fadeUp .8s ease both}
+  .d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}
 
-  body {
-    background: var(--bg);
-    color: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 16px;
-    overflow-x: hidden;
-  }
+  body::after{content:'';position:fixed;inset:0;opacity:.3;pointer-events:none;z-index:0;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.05'/%3E%3C/svg%3E")}
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(32px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 30px rgba(0,229,160,0.3); }
-    50%       { box-shadow: 0 0 60px rgba(0,229,160,0.6); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50%       { transform: translateY(-8px); }
-  }
-  @keyframes shimmer {
-    0%   { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-  @keyframes gradMove {
-    0%   { background-position: 0% 50%; }
-    50%  { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+  .orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
 
-  .fade-up { animation: fadeUp 0.8s ease both; }
-  .delay-1 { animation-delay: 0.15s; }
-  .delay-2 { animation-delay: 0.3s; }
-  .delay-3 { animation-delay: 0.45s; }
-  .delay-4 { animation-delay: 0.6s; }
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:18px 40px;
+    display:flex;justify-content:space-between;align-items:center;
+    background:rgba(9,9,14,.88);backdrop-filter:blur(20px);border-bottom:1px solid var(--border)}
+  .nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--green)}
+  .nav-cta{background:var(--green);color:#001a0e;font-family:'Syne',sans-serif;font-weight:700;
+    font-size:14px;padding:10px 24px;border-radius:100px;text-decoration:none;transition:all .2s}
+  .nav-cta:hover{background:#00ffb3;transform:translateY(-1px)}
 
-  /* ── NOISE OVERLAY ── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 0; opacity: 0.35;
-  }
+  section{position:relative;z-index:1}
 
-  /* ── GLOW ORBS ── */
-  .orb {
-    position: absolute; border-radius: 50%;
-    filter: blur(80px); pointer-events: none; z-index: 0;
-  }
-  .orb-1 { width: 600px; height: 600px; background: rgba(0,180,120,0.12); top: -200px; right: -150px; }
-  .orb-2 { width: 400px; height: 400px; background: rgba(60,60,200,0.08); bottom: 100px; left: -100px; }
-  .orb-3 { width: 500px; height: 500px; background: rgba(0,180,120,0.08); top: 40%; left: 50%; transform: translateX(-50%); }
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding:140px 24px 100px;overflow:hidden}
+  .hero-tag{display:inline-flex;align-items:center;gap:8px;
+    background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.25);
+    color:var(--green);font-size:13px;font-weight:500;
+    padding:8px 18px;border-radius:100px;margin-bottom:32px;letter-spacing:.5px}
+  .hero-tag span{width:6px;height:6px;background:var(--green);border-radius:50%;animation:float 2s ease infinite}
+  .hero h1{font-family:'Syne',sans-serif;font-size:clamp(44px,7vw,92px);
+    font-weight:800;line-height:1.0;letter-spacing:-2.5px;margin-bottom:28px;max-width:920px}
+  .hero h1 em{font-style:normal;
+    background:linear-gradient(135deg,var(--green),#00b8d4,var(--green));
+    background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    animation:shimmer 3s linear infinite}
+  .hero-sub{font-size:clamp(17px,2vw,22px);color:var(--gray);max-width:600px;
+    line-height:1.65;margin-bottom:48px;font-weight:300}
+  .hero-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:56px}
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 20px 40px;
-    display: flex; justify-content: space-between; align-items: center;
-    background: rgba(9,9,14,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800; font-size: 20px;
-    color: var(--green); letter-spacing: -0.5px;
-  }
-  .nav-cta {
-    background: var(--green); color: #001a0e;
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 14px; padding: 10px 24px; border-radius: 100px;
-    text-decoration: none; transition: all 0.2s;
-    letter-spacing: 0.3px;
-  }
-  .nav-cta:hover { background: #00ffb3; transform: translateY(-1px); }
+  .btn-green{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#001a0e;
+    font-family:'Syne',sans-serif;font-weight:800;font-size:17px;padding:18px 42px;
+    border-radius:16px;text-decoration:none;transition:all .25s;animation:glow 3s ease infinite}
+  .btn-green:hover{background:#00ffb3;transform:translateY(-3px);box-shadow:0 20px 40px rgba(0,229,160,.35)}
+  .btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--white);
+    font-family:'Syne',sans-serif;font-weight:600;font-size:16px;padding:18px 32px;
+    border-radius:16px;text-decoration:none;transition:all .25s;border:1px solid var(--border)}
+  .btn-ghost:hover{border-color:rgba(0,229,160,.4);background:rgba(0,229,160,.05);transform:translateY(-2px)}
 
-  /* ── SECTIONS ── */
-  section { position: relative; z-index: 1; }
+  .hero-proof{display:flex;gap:36px;flex-wrap:wrap;justify-content:center;color:var(--gray);font-size:14px}
+  .hero-proof span{display:flex;align-items:center;gap:7px}
+  .check{color:var(--green);font-weight:700}
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    text-align: center;
-    padding: 140px 24px 100px;
-    overflow: hidden;
-  }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(0,229,160,0.08);
-    border: 1px solid rgba(0,229,160,0.25);
-    color: var(--green); font-size: 13px; font-weight: 500;
-    padding: 8px 18px; border-radius: 100px;
-    margin-bottom: 32px; letter-spacing: 0.5px;
-  }
-  .hero-tag span { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: float 2s ease infinite; }
+  .stats-bar{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:48px 24px}
+  .stats-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);text-align:center}
+  .stat{padding:0 16px;border-right:1px solid var(--border)}
+  .stat:last-child{border-right:none}
+  .stat-num{font-family:'Syne',sans-serif;font-size:clamp(30px,4vw,50px);font-weight:800;color:var(--green);line-height:1;margin-bottom:8px}
+  .stat-num.gold{color:var(--gold)}
+  .stat-label{color:var(--gray);font-size:14px;line-height:1.4}
 
-  .hero h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(44px, 7vw, 90px);
-    font-weight: 800; line-height: 1.0;
-    letter-spacing: -2px; margin-bottom: 28px;
-    max-width: 900px;
-  }
-  .hero h1 em {
-    font-style: normal;
-    background: linear-gradient(135deg, var(--green), #00b8d4, var(--green));
-    background-size: 200% auto;
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    animation: shimmer 3s linear infinite;
-  }
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
+  .sec{padding:110px 0}
 
-  .hero-sub {
-    font-size: clamp(17px, 2vw, 22px); color: var(--gray);
-    max-width: 580px; line-height: 1.65; margin-bottom: 48px;
-    font-weight: 300;
-  }
+  .s-tag{display:inline-block;font-size:12px;font-weight:600;padding:6px 16px;
+    border-radius:100px;margin-bottom:22px;letter-spacing:1.5px;text-transform:uppercase}
+  .s-tag.red{background:rgba(255,100,100,.1);border:1px solid rgba(255,100,100,.25);color:#ff8888}
+  .s-tag.green{background:rgba(0,229,160,.08);border:1px solid rgba(0,229,160,.25);color:var(--green)}
+  .s-tag.gold{background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.25);color:var(--gold)}
+  .s-tag.blue{background:rgba(136,153,255,.08);border:1px solid rgba(136,153,255,.25);color:var(--blue)}
 
-  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-bottom: 60px; }
+  .s-h{font-family:'Syne',sans-serif;font-size:clamp(32px,4.5vw,58px);
+    font-weight:800;line-height:1.08;letter-spacing:-1.5px;margin-bottom:16px}
+  .s-sub{color:var(--gray);font-size:18px;line-height:1.65;margin-bottom:52px;max-width:620px}
 
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 10px;
-    background: var(--green); color: #001a0e;
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 17px; padding: 18px 40px; border-radius: 16px;
-    text-decoration: none; transition: all 0.25s;
-    animation: pulse-glow 3s ease infinite;
-    letter-spacing: 0.2px;
-  }
-  .btn-primary:hover { background: #00ffb3; transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,229,160,0.35); }
-  .btn-primary svg { flex-shrink: 0; }
+  .prob-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+  .prob-card{background:rgba(28,14,14,.7);border:1px solid rgba(255,100,100,.12);
+    border-left:3px solid rgba(255,100,100,.5);border-radius:20px;padding:26px 30px;transition:all .3s}
+  .prob-card:hover{border-left-color:#ff6464;transform:translateX(4px)}
+  .prob-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:8px}
+  .prob-card p{color:var(--gray);font-size:15px;line-height:1.6}
+  .prob-close{margin-top:28px;background:rgba(40,14,14,.8);border:1px solid rgba(255,100,100,.3);
+    border-radius:16px;padding:22px 32px;text-align:center;color:rgba(255,180,180,.9);font-size:18px;font-weight:500}
 
-  .btn-secondary {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: transparent; color: var(--white);
-    font-family: 'Syne', sans-serif; font-weight: 600;
-    font-size: 16px; padding: 18px 32px; border-radius: 16px;
-    text-decoration: none; transition: all 0.25s;
-    border: 1px solid var(--border);
-  }
-  .btn-secondary:hover { border-color: rgba(0,229,160,0.4); background: rgba(0,229,160,0.05); transform: translateY(-2px); }
+  .ghl-box{background:linear-gradient(135deg,rgba(0,40,28,.9),rgba(0,18,12,.9));
+    border:2px solid var(--green);border-radius:28px;padding:52px;text-align:center;
+    position:relative;overflow:hidden;margin-bottom:48px}
+  .ghl-box::before{content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 0%,rgba(0,229,160,.1),transparent 65%);pointer-events:none}
+  .ghl-name{font-family:'Syne',sans-serif;font-size:clamp(52px,8vw,84px);
+    font-weight:800;color:var(--green);letter-spacing:-2px;margin-bottom:10px;position:relative;z-index:1}
+  .ghl-sub{color:var(--gray);font-size:18px;margin-bottom:36px;position:relative;z-index:1}
+  .pills{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:40px;position:relative;z-index:1}
+  .pill{background:rgba(0,229,160,.1);border:1px solid rgba(0,229,160,.25);
+    color:var(--green);font-size:14px;font-weight:500;padding:8px 20px;border-radius:100px;transition:all .2s}
+  .pill:hover{background:rgba(0,229,160,.2);transform:translateY(-2px)}
+  .price-badge{display:inline-block;background:rgba(0,229,160,.08);
+    border:1.5px solid rgba(0,229,160,.4);border-radius:20px;padding:20px 52px;position:relative;z-index:1}
+  .price-big{font-family:'Syne',sans-serif;font-size:clamp(32px,5vw,54px);
+    font-weight:800;color:var(--green);letter-spacing:-1px}
+  .price-note{color:var(--gray);font-size:14px;margin-top:4px}
 
-  .hero-proof {
-    display: flex; gap: 40px; flex-wrap: wrap; justify-content: center;
-    color: var(--gray); font-size: 14px;
-  }
-  .hero-proof span { display: flex; align-items: center; gap: 8px; }
-  .hero-proof svg { color: var(--green); }
+  .ben-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+  .ben-card{background:var(--card);border:1px solid var(--border);border-radius:20px;
+    padding:32px 28px;transition:all .3s;position:relative;overflow:hidden}
+  .ben-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--green),transparent);opacity:0;transition:opacity .3s}
+  .ben-card:hover{border-color:rgba(0,229,160,.3);transform:translateY(-4px)}
+  .ben-card:hover::before{opacity:1}
+  .ben-icon{width:46px;height:46px;border-radius:13px;background:rgba(0,229,160,.1);
+    border:1px solid rgba(0,229,160,.2);display:flex;align-items:center;justify-content:center;
+    margin-bottom:18px;color:var(--green);font-family:'Syne',sans-serif;font-weight:800;font-size:20px}
+  .ben-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:10px}
+  .ben-card p{color:var(--gray);font-size:15px;line-height:1.65}
 
-  /* ── STATS BAR ── */
-  .stats-bar {
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    padding: 48px 24px;
-  }
-  .stats-inner {
-    max-width: 900px; margin: 0 auto;
-    display: grid; grid-template-columns: repeat(3, 1fr);
-    gap: 0; text-align: center;
-  }
-  .stat {
-    padding: 0 20px;
-    border-right: 1px solid var(--border);
-  }
-  .stat:last-child { border-right: none; }
-  .stat-num {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(36px, 5vw, 56px); font-weight: 800;
-    color: var(--green); line-height: 1; margin-bottom: 8px;
-  }
-  .stat-label { color: var(--gray); font-size: 15px; }
+  /* INGRESOS HERO */
+  .ing-banner{background:linear-gradient(135deg,rgba(40,36,0,.6),rgba(20,18,0,.5));
+    border:1.5px solid rgba(245,200,66,.3);border-radius:24px;padding:44px;
+    text-align:center;margin-bottom:40px;position:relative;overflow:hidden}
+  .ing-banner::before{content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 50% 0%,rgba(245,200,66,.07),transparent 65%);pointer-events:none}
+  .ing-banner h3{font-family:'Syne',sans-serif;font-size:clamp(24px,3.5vw,42px);
+    font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:14px;position:relative;z-index:1}
+  .ing-banner h3 span{color:var(--gold)}
+  .ing-banner p{color:var(--gray);font-size:17px;max-width:560px;margin:0 auto;
+    line-height:1.65;position:relative;z-index:1}
 
-  /* ── PROBLEMA ── */
-  .problema {
-    padding: 120px 24px;
-    max-width: 1100px; margin: 0 auto;
-  }
-  .section-tag {
-    display: inline-block;
-    background: rgba(255,100,100,0.1);
-    border: 1px solid rgba(255,100,100,0.25);
-    color: #ff8888; font-size: 12px; font-weight: 600;
-    padding: 6px 16px; border-radius: 100px;
-    margin-bottom: 24px; letter-spacing: 1.5px; text-transform: uppercase;
-  }
-  .section-tag.green {
-    background: rgba(0,229,160,0.08);
-    border-color: rgba(0,229,160,0.25);
-    color: var(--green);
-  }
-  .section-tag.gold {
-    background: rgba(245,200,66,0.08);
-    border-color: rgba(245,200,66,0.25);
-    color: var(--gold);
-  }
+  .serv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
+  .serv-card{background:rgba(20,18,8,.9);border:1px solid rgba(245,200,66,.15);
+    border-top:3px solid rgba(245,200,66,.5);border-radius:18px;padding:26px 22px;transition:all .3s}
+  .serv-card:hover{border-top-color:var(--gold);transform:translateY(-4px);box-shadow:0 12px 30px rgba(245,200,66,.1)}
+  .serv-badge{display:inline-block;background:rgba(245,200,66,.1);color:var(--gold);
+    font-size:11px;font-weight:700;padding:3px 10px;border-radius:100px;
+    margin-bottom:12px;letter-spacing:1px;text-transform:uppercase}
+  .serv-card h4{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:8px}
+  .serv-card p{color:var(--gray);font-size:14px;line-height:1.6}
+  .ing-close{background:rgba(40,36,0,.8);border:1.5px solid rgba(245,200,66,.4);
+    border-radius:16px;padding:28px 40px;text-align:center;
+    font-family:'Syne',sans-serif;font-weight:800;
+    font-size:clamp(20px,3vw,30px);color:var(--gold);letter-spacing:-.5px}
 
-  .section-h {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(32px, 4.5vw, 56px);
-    font-weight: 800; line-height: 1.1;
-    letter-spacing: -1.5px; margin-bottom: 16px;
-  }
-  .section-sub { color: var(--gray); font-size: 18px; line-height: 1.65; margin-bottom: 56px; max-width: 600px; }
+  /* DOBLE */
+  .doble-wrap{background:linear-gradient(135deg,rgba(0,30,20,.5),rgba(20,18,0,.4));
+    border:1px solid rgba(0,229,160,.12);border-radius:28px;padding:52px}
+  .doble-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:36px}
+  .d-card{border-radius:20px;padding:32px}
+  .d-card.gc{background:rgba(0,40,28,.8);border:1.5px solid rgba(0,229,160,.3)}
+  .d-card.yc{background:rgba(40,36,0,.8);border:1.5px solid rgba(245,200,66,.3)}
+  .d-card h4{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;margin-bottom:12px}
+  .d-card h4.g{color:var(--green)}.d-card h4.y{color:var(--gold)}
+  .d-card p{color:var(--gray);font-size:15px;line-height:1.65;margin-bottom:20px}
+  .d-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+  .d-list li{color:var(--white);font-size:15px;padding-left:20px;position:relative}
+  .d-list li::before{content:'→';position:absolute;left:0;color:var(--green);font-weight:700}
+  .d-list.y li::before{color:var(--gold)}
 
-  .problema-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 16px;
-  }
-  .problema-card {
-    background: rgba(30,14,14,0.6);
-    border: 1px solid rgba(255,100,100,0.12);
-    border-radius: 20px; padding: 28px 32px;
-    border-left: 3px solid rgba(255,100,100,0.5);
-    transition: all 0.3s;
-  }
-  .problema-card:hover { border-left-color: #ff6464; transform: translateX(4px); }
-  .problema-card h4 {
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 18px; margin-bottom: 8px;
-  }
-  .problema-card p { color: var(--gray); font-size: 15px; line-height: 1.6; }
+  /* AUTONOMIA */
+  .auto-wrap{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center}
+  .auto-list{display:flex;flex-direction:column;gap:14px}
+  .auto-item{display:flex;gap:14px;align-items:flex-start;padding:18px 22px;
+    background:rgba(14,16,28,.8);border:1px solid rgba(136,153,255,.15);
+    border-left:3px solid rgba(136,153,255,.5);border-radius:16px;transition:all .3s}
+  .auto-item:hover{border-left-color:var(--blue);transform:translateX(4px)}
+  .auto-n{width:34px;height:34px;flex-shrink:0;border-radius:10px;
+    background:rgba(136,153,255,.1);border:1px solid rgba(136,153,255,.3);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--blue);font-family:'Syne',sans-serif;font-weight:800;font-size:15px}
+  .auto-item h5{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;margin-bottom:3px}
+  .auto-item p{color:var(--gray);font-size:13px;line-height:1.55}
+  .auto-visual{background:var(--card);border:1px solid var(--border);border-radius:28px;padding:44px;text-align:center}
+  .big-stmt{font-family:'Syne',sans-serif;font-size:clamp(26px,3.5vw,44px);
+    font-weight:800;line-height:1.15;letter-spacing:-1.5px;margin-bottom:28px}
+  .big-stmt em{font-style:normal;color:var(--green)}
 
-  .problema-closing {
-    margin-top: 32px;
-    background: rgba(40,14,14,0.8);
-    border: 1px solid rgba(255,100,100,0.3);
-    border-radius: 16px; padding: 24px 32px;
-    text-align: center;
-    color: rgba(255,180,180,0.9); font-size: 18px; font-weight: 500;
-  }
+  /* CTA */
+  .cta-sec{padding:120px 24px 140px;text-align:center;
+    background:radial-gradient(ellipse at 50% 50%,rgba(0,180,120,.1) 0%,transparent 70%)}
+  .cta-inner{max-width:740px;margin:0 auto}
+  .cta-sec h2{font-family:'Syne',sans-serif;font-size:clamp(40px,6vw,78px);
+    font-weight:800;line-height:1.0;letter-spacing:-2px;margin-bottom:20px}
+  .cta-sec h2 span{color:var(--green)}
+  .cta-sec p{color:var(--gray);font-size:18px;margin-bottom:44px;line-height:1.6}
+  .cta-val{display:inline-block;background:rgba(0,229,160,.06);
+    border:1px solid rgba(0,229,160,.2);border-radius:14px;padding:16px 32px;
+    color:var(--green);font-size:15px;margin-bottom:40px}
+  .cta-val strong{font-family:'Syne',sans-serif;font-size:19px}
+  .cta-btns{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .btn-huge{display:inline-flex;align-items:center;gap:12px;background:var(--green);color:#001a0e;
+    font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(18px,2.5vw,24px);
+    padding:24px 60px;border-radius:20px;text-decoration:none;transition:all .25s;animation:glow 3s ease infinite}
+  .btn-huge:hover{background:#00ffb3;transform:translateY(-4px);box-shadow:0 24px 50px rgba(0,229,160,.4)}
+  .cta-dm{color:var(--dgray);font-size:15px}
+  .cta-dm a{color:var(--gray);text-decoration:underline;text-underline-offset:3px}
 
-  /* ── SOLUCIÓN ── */
-  .solucion {
-    padding: 120px 24px;
-    background: linear-gradient(180deg, transparent, rgba(0,30,20,0.3), transparent);
-  }
-  .solucion-inner { max-width: 1100px; margin: 0 auto; }
+  footer{border-top:1px solid var(--border);padding:28px 40px;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-wrap:wrap;gap:16px;color:var(--dgray);font-size:14px}
+  .foot-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--green)}
 
-  .ghl-card {
-    background: linear-gradient(135deg, rgba(0,40,28,0.9), rgba(0,20,15,0.9));
-    border: 2px solid var(--green);
-    border-radius: 28px; padding: 48px;
-    text-align: center; margin-bottom: 48px;
-    position: relative; overflow: hidden;
-  }
-  .ghl-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(0,229,160,0.12), transparent 70%);
-    pointer-events: none;
-  }
-  .ghl-logo {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(48px, 8vw, 80px); font-weight: 800;
-    color: var(--green); letter-spacing: -2px;
-    margin-bottom: 12px; position: relative; z-index: 1;
-  }
-  .ghl-tagline {
-    color: var(--gray); font-size: 18px; margin-bottom: 32px; position: relative; z-index: 1;
-  }
-  .features-pills {
-    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-    margin-bottom: 40px; position: relative; z-index: 1;
-  }
-  .feat-pill {
-    background: rgba(0,229,160,0.1);
-    border: 1px solid rgba(0,229,160,0.25);
-    color: var(--green); font-size: 14px; font-weight: 500;
-    padding: 8px 20px; border-radius: 100px;
-    transition: all 0.2s;
-  }
-  .feat-pill:hover { background: rgba(0,229,160,0.2); transform: translateY(-2px); }
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.visible{opacity:1;transform:translateY(0)}
 
-  .price-box {
-    display: inline-block;
-    background: rgba(0,229,160,0.08);
-    border: 1.5px solid rgba(0,229,160,0.4);
-    border-radius: 20px; padding: 20px 48px;
-    position: relative; z-index: 1;
+  @media(max-width:768px){
+    nav{padding:14px 18px}
+    .stats-inner{grid-template-columns:1fr 1fr;gap:28px}
+    .stat{border-right:none}
+    .stat:nth-child(odd){border-right:1px solid var(--border)}
+    .auto-wrap{grid-template-columns:1fr;gap:40px}
+    .doble-grid{grid-template-columns:1fr}
+    .ghl-box,.ing-banner,.doble-wrap{padding:32px 22px}
+    footer{justify-content:center;text-align:center}
   }
-  .price-main {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(32px, 5vw, 52px); font-weight: 800;
-    color: var(--green); letter-spacing: -1px;
-  }
-  .price-sub { color: var(--gray); font-size: 14px; margin-top: 4px; }
-
-  /* ── BENEFICIOS ── */
-  .beneficios { padding: 0 24px 120px; }
-  .beneficios-inner { max-width: 1100px; margin: 0 auto; }
-  .beneficios-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 20px;
-  }
-  .benefit-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px; padding: 32px 28px;
-    transition: all 0.3s; position: relative; overflow: hidden;
-  }
-  .benefit-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, transparent, var(--green), transparent);
-    opacity: 0; transition: opacity 0.3s;
-  }
-  .benefit-card:hover { border-color: rgba(0,229,160,0.3); transform: translateY(-4px); }
-  .benefit-card:hover::before { opacity: 1; }
-
-  .benefit-icon {
-    width: 48px; height: 48px; border-radius: 14px;
-    background: rgba(0,229,160,0.1);
-    border: 1px solid rgba(0,229,160,0.2);
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 20px; color: var(--green); font-size: 22px;
-  }
-  .benefit-card h4 {
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 18px; margin-bottom: 10px;
-  }
-  .benefit-card p { color: var(--gray); font-size: 15px; line-height: 1.65; }
-
-  /* ── AUTONOMÍA ── */
-  .autonomia {
-    padding: 120px 24px;
-    background: linear-gradient(180deg, transparent, rgba(30,30,100,0.1), transparent);
-  }
-  .autonomia-inner {
-    max-width: 1100px; margin: 0 auto;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
-  }
-  .autonomia-list { display: flex; flex-direction: column; gap: 16px; }
-  .auto-item {
-    display: flex; gap: 16px; align-items: flex-start;
-    padding: 20px 24px;
-    background: rgba(14,16,28,0.8);
-    border: 1px solid rgba(100,110,255,0.15);
-    border-radius: 16px; border-left: 3px solid rgba(130,140,255,0.6);
-    transition: all 0.3s;
-  }
-  .auto-item:hover { border-left-color: #9aa5ff; transform: translateX(4px); }
-  .auto-dot {
-    width: 36px; height: 36px; flex-shrink: 0;
-    border-radius: 10px; background: rgba(100,110,255,0.1);
-    border: 1px solid rgba(100,110,255,0.3);
-    display: flex; align-items: center; justify-content: center;
-    color: #9aa5ff; font-size: 16px; font-weight: 700;
-    font-family: 'Syne', sans-serif;
-  }
-  .auto-item h5 {
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 16px; margin-bottom: 4px;
-  }
-  .auto-item p { color: var(--gray); font-size: 14px; line-height: 1.55; }
-
-  .autonomia-visual {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 28px; padding: 40px;
-    text-align: center;
-  }
-  .big-statement {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(28px, 4vw, 48px); font-weight: 800;
-    line-height: 1.15; letter-spacing: -1.5px; margin-bottom: 24px;
-  }
-  .big-statement em { font-style: normal; color: var(--green); }
-
-  /* ── INGRESOS ── */
-  .ingresos { padding: 0 24px 120px; }
-  .ingresos-inner { max-width: 1100px; margin: 0 auto; }
-  .ingresos-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px; margin-bottom: 32px;
-  }
-  .ingreso-card {
-    background: rgba(20,18,8,0.8);
-    border: 1px solid rgba(245,200,66,0.15);
-    border-radius: 20px; padding: 28px 24px;
-    border-left: 3px solid rgba(245,200,66,0.5);
-    transition: all 0.3s;
-  }
-  .ingreso-card:hover { border-left-color: var(--gold); transform: translateX(4px); }
-  .ingreso-card h4 {
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: 17px; margin-bottom: 8px;
-  }
-  .ingreso-card p { color: var(--gray); font-size: 14px; line-height: 1.6; }
-
-  .ingresos-closing {
-    background: rgba(40,36,0,0.6);
-    border: 1px solid rgba(245,200,66,0.3);
-    border-radius: 16px; padding: 24px 32px;
-    text-align: center; color: var(--gold);
-    font-family: 'Syne', sans-serif; font-weight: 700;
-    font-size: clamp(18px, 2.5vw, 24px);
-  }
-
-  /* ── CTA FINAL ── */
-  .cta-section {
-    padding: 120px 24px 140px;
-    text-align: center;
-    background: radial-gradient(ellipse at 50% 50%, rgba(0,180,120,0.1) 0%, transparent 70%);
-  }
-  .cta-inner { max-width: 720px; margin: 0 auto; }
-  .cta-section h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(40px, 6vw, 76px); font-weight: 800;
-    line-height: 1.0; letter-spacing: -2px; margin-bottom: 20px;
-  }
-  .cta-section h2 span { color: var(--green); }
-  .cta-section p { color: var(--gray); font-size: 18px; margin-bottom: 48px; line-height: 1.6; }
-
-  .cta-value {
-    display: inline-block;
-    background: rgba(0,229,160,0.06);
-    border: 1px solid rgba(0,229,160,0.2);
-    border-radius: 14px; padding: 16px 32px;
-    color: var(--green); font-size: 15px; margin-bottom: 40px;
-    font-weight: 500;
-  }
-  .cta-value strong { font-family: 'Syne', sans-serif; font-size: 18px; }
-
-  .cta-btn-wrap { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-
-  .btn-huge {
-    display: inline-flex; align-items: center; gap: 12px;
-    background: var(--green); color: #001a0e;
-    font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: clamp(18px, 2.5vw, 24px);
-    padding: 22px 56px; border-radius: 20px;
-    text-decoration: none; transition: all 0.25s;
-    animation: pulse-glow 3s ease infinite;
-    letter-spacing: -0.3px;
-  }
-  .btn-huge:hover { background: #00ffb3; transform: translateY(-4px); box-shadow: 0 24px 50px rgba(0,229,160,0.4); }
-
-  .cta-dm { color: var(--dgray); font-size: 15px; }
-  .cta-dm a { color: var(--gray); text-decoration: underline; text-underline-offset: 3px; }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 40px;
-    display: flex; justify-content: space-between; align-items: center;
-    flex-wrap: wrap; gap: 16px;
-    color: var(--dgray); font-size: 14px;
-  }
-  footer .foot-logo {
-    font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: 18px; color: var(--green);
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
-    .stats-inner { grid-template-columns: 1fr; gap: 32px; }
-    .stat { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 32px; }
-    .stat:last-child { border-bottom: none; }
-    .autonomia-inner { grid-template-columns: 1fr; gap: 48px; }
-    .ghl-card { padding: 32px 24px; }
-    footer { justify-content: center; text-align: center; }
-  }
-
-  /* ── SCROLL REVEAL ── */
-  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">GoHighLevel</div>
-  <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="nav-cta">Probalo gratis →</a>
+  <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="nav-cta">Empeza gratis →</a>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
+  <div class="orb" style="width:620px;height:620px;background:rgba(0,180,120,.11);top:-200px;right:-150px"></div>
+  <div class="orb" style="width:400px;height:400px;background:rgba(245,200,66,.06);bottom:100px;left:-100px"></div>
 
   <div class="hero-tag fade-up"><span></span> Para emprendedores y freelancers</div>
-
-  <h1 class="fade-up delay-1">
-    Tu negocio puede<br>
-    funcionar solo,<br>
-    crecer y generar<br>
-    <em>mas ingresos.</em>
-  </h1>
-
-  <p class="hero-sub fade-up delay-2">
-    Todo desde una sola plataforma. Sin depender de nadie.<br>
-    Y tambien podes ofrecer servicios a tus clientes.
-  </p>
-
-  <div class="hero-btns fade-up delay-3">
-    <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="btn-primary">
-      <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-      Empeza gratis — 14 dias
-    </a>
-    <a href="#solucion" class="btn-secondary">Ver como funciona →</a>
+  <h1 class="fade-up d1">Tu negocio puede crecer,<br>funcionar solo y<br><em>generar mas ingresos.</em></h1>
+  <p class="hero-sub fade-up d2">Una sola plataforma para gestionar tu negocio <strong>y</strong> ofrecer servicios digitales a tus clientes — sin ser experto, sin depender de nadie.</p>
+  <div class="hero-btns fade-up d3">
+    <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="btn-green">Empeza gratis — 14 dias →</a>
+    <a href="#ingresos" class="btn-ghost">Ver como ganar mas ↓</a>
   </div>
-
-  <div class="hero-proof fade-up delay-4">
-    <span>
-      <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-      Sin contratos
-    </span>
-    <span>
-      <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-      14 dias gratis
-    </span>
-    <span>
-      <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-      Todo en un solo lugar
-    </span>
+  <div class="hero-proof fade-up d4">
+    <span><span class="check">✓</span> Sin contratos</span>
+    <span><span class="check">✓</span> 14 dias gratis</span>
+    <span><span class="check">✓</span> Todo en un lugar</span>
+    <span><span class="check">✓</span> Revende servicios</span>
   </div>
 </section>
 
 <!-- STATS -->
 <div class="stats-bar reveal">
   <div class="stats-inner">
-    <div class="stat">
-      <div class="stat-num">+60K</div>
-      <div class="stat-label">negocios usando GHL</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">$97</div>
-      <div class="stat-label">por mes, todo incluido</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">14</div>
-      <div class="stat-label">dias gratis para probarlo</div>
-    </div>
+    <div class="stat"><div class="stat-num">+60K</div><div class="stat-label">negocios activos en GHL</div></div>
+    <div class="stat"><div class="stat-num">$97</div><div class="stat-label">por mes todo incluido</div></div>
+    <div class="stat"><div class="stat-num gold">+$$$</div><div class="stat-label">ingresos extra revendiendo</div></div>
+    <div class="stat"><div class="stat-num">14</div><div class="stat-label">dias gratis para probarlo</div></div>
   </div>
 </div>
 
 <!-- PROBLEMA -->
-<section class="problema">
-  <div class="orb orb-3" style="background:rgba(200,50,50,0.06)"></div>
-  <div class="section-tag reveal">El problema</div>
-  <h2 class="section-h reveal">Asi se ve tu negocio<br>hoy en dia.</h2>
-  <p class="section-sub reveal">Si te identicas con alguno de estos puntos, GoHighLevel fue hecho para vos.</p>
-
-  <div class="problema-grid reveal">
-    <div class="problema-card">
-      <h4>Pagas por varias cosas</h4>
-      <p>Y no todas se conectan entre si. Cada herramienta vive en su propio mundo.</p>
+<section class="sec">
+  <div class="wrap">
+    <div class="s-tag red reveal">El problema</div>
+    <h2 class="s-h reveal">Asi se ve tu negocio<br>hoy en dia.</h2>
+    <p class="s-sub reveal">Si te identificas con alguno de estos puntos, GoHighLevel fue hecho para vos.</p>
+    <div class="prob-grid reveal">
+      <div class="prob-card"><h4>Pagas por varias cosas</h4><p>Y no todas se conectan entre si. Cada herramienta vive en su propio mundo.</p></div>
+      <div class="prob-card"><h4>Perdes tiempo cambiando apps</h4><p>En vez de enfocarte en vender, pasas el dia navegando entre plataformas.</p></div>
+      <div class="prob-card"><h4>Dependes de terceros</h4><p>Para cada parte de tu negocio necesitas una solucion diferente que no controlas.</p></div>
+      <div class="prob-card"><h4>Todo separado y desorganizado</h4><p>Clientes, pagos, agenda y marketing estan en lugares distintos.</p></div>
+      <div class="prob-card"><h4>No podes escalar</h4><p>El sistema actual no te acompaña cuando el negocio crece.</p></div>
+      <div class="prob-card"><h4>Dejas dinero sobre la mesa</h4><p>No ofrecés servicios digitales porque no tenes las herramientas para hacerlo facil.</p></div>
     </div>
-    <div class="problema-card">
-      <h4>Perdes tiempo cambiando apps</h4>
-      <p>En vez de enfocarte en vender, pasas el dia navegando entre plataformas.</p>
-    </div>
-    <div class="problema-card">
-      <h4>Dependes de terceros</h4>
-      <p>Para cada parte de tu negocio necesitas una solucion diferente.</p>
-    </div>
-    <div class="problema-card">
-      <h4>Todo separado y desorganizado</h4>
-      <p>Clientes, pagos, agenda y marketing estan en lugares distintos.</p>
-    </div>
-    <div class="problema-card">
-      <h4>Escalar se hace complicado</h4>
-      <p>El sistema actual no te acompaña cuando el negocio crece.</p>
-    </div>
-    <div class="problema-card">
-      <h4>Tu negocio no crece como deberia</h4>
-      <p>Y la razon no sos vos — es que las herramientas no trabajan juntas.</p>
-    </div>
-  </div>
-
-  <div class="problema-closing reveal">
-    Y mientras tanto, tu negocio no crece como podria.
+    <div class="prob-close reveal">Y mientras tanto, tu negocio no crece ni genera lo que podria.</div>
   </div>
 </section>
 
 <!-- SOLUCIÓN -->
-<section class="solucion" id="solucion">
-  <div class="solucion-inner">
-    <div style="text-align:center; margin-bottom:48px;">
-      <div class="section-tag green reveal">La solucion</div>
-      <h2 class="section-h reveal">Todo lo que necesitas.<br><span style="color:var(--green)">En un solo lugar.</span></h2>
-      <p class="section-sub reveal" style="margin:0 auto;">GoHighLevel combina todo en una sola plataforma para que tu negocio funcione solo.</p>
-    </div>
-
-    <div class="ghl-card reveal">
-      <div class="ghl-logo">GoHighLevel</div>
-      <div class="ghl-tagline">La plataforma all-in-one para emprendedores y freelancers</div>
-      <div class="features-pills">
-        <span class="feat-pill">CRM</span>
-        <span class="feat-pill">Agenda de turnos</span>
-        <span class="feat-pill">Funnels</span>
-        <span class="feat-pill">Email marketing</span>
-        <span class="feat-pill">SMS</span>
-        <span class="feat-pill">Sitio web</span>
-        <span class="feat-pill">Automatizaciones</span>
-        <span class="feat-pill">Pagos</span>
-        <span class="feat-pill">Pipeline de ventas</span>
-        <span class="feat-pill">App movil</span>
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="s-tag green reveal">La solucion</div>
+    <h2 class="s-h reveal">Todo lo que necesitas.<br><span style="color:var(--green)">En un solo lugar.</span></h2>
+    <p class="s-sub reveal">GoHighLevel reemplaza todo — y ademas te da las herramientas para vender servicios a tus clientes.</p>
+    <div class="ghl-box reveal">
+      <div class="ghl-name">GoHighLevel</div>
+      <div class="ghl-sub">La plataforma all-in-one para emprendedores, freelancers y agencias</div>
+      <div class="pills">
+        <span class="pill">CRM</span><span class="pill">Agenda de turnos</span><span class="pill">Funnels</span>
+        <span class="pill">Email marketing</span><span class="pill">SMS</span><span class="pill">Sitio web</span>
+        <span class="pill">Tiendas online</span><span class="pill">Automatizaciones</span>
+        <span class="pill">Pipeline de ventas</span><span class="pill">Pagos</span>
+        <span class="pill">Landing pages</span><span class="pill">App movil</span>
       </div>
-      <div class="price-box">
-        <div class="price-main">Todo por solo $97/mes</div>
-        <div class="price-sub">Sin contratos • 14 dias gratis para probarlo</div>
+      <div class="price-badge">
+        <div class="price-big">Todo por solo $97/mes</div>
+        <div class="price-note">Sin contratos • 14 dias gratis • Cancelá cuando quieras</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- BENEFICIOS -->
-<section class="beneficios">
-  <div class="beneficios-inner">
-    <div class="section-tag green reveal">Que logras</div>
-    <h2 class="section-h reveal">Esto es lo que cambia<br><span style="color:var(--green)">en tu negocio.</span></h2>
-    <p class="section-sub reveal">Resultados reales desde el primer dia.</p>
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="s-tag green reveal">Que logras</div>
+    <h2 class="s-h reveal">Resultados reales<br><span style="color:var(--green)">desde el primer dia.</span></h2>
+    <div class="ben-grid reveal">
+      <div class="ben-card"><div class="ben-icon">+</div><h4>Mas leads calificados</h4><p>Funnels y landing pages que capturan clientes las 24 horas, aunque no estes trabajando.</p></div>
+      <div class="ben-card"><div class="ben-icon">A</div><h4>Negocio en piloto automatico</h4><p>Seguimientos, recordatorios y ventas funcionando solos. Menos operacion, mas resultados.</p></div>
+      <div class="ben-card"><div class="ben-icon">$</div><h4>Menos gastos, mas margen</h4><p>Un solo pago reemplaza todo lo que pagas por separado. La diferencia es ganancia pura.</p></div>
+      <div class="ben-card"><div class="ben-icon">&gt;</div><h4>Clientes mejor atendidos</h4><p>Responde rapido, agenda facil, nunca pierdas un lead. Todo desde el celular.</p></div>
+      <div class="ben-card"><div class="ben-icon">^</div><h4>Escala sin limites</h4><p>La plataforma crece con vos. No necesitas cambiar de sistema cuando tu negocio crece.</p></div>
+      <div class="ben-card"><div class="ben-icon">*</div><h4>Todo conectado</h4><p>CRM, agenda, marketing y pagos hablando entre si. Un solo lugar para gestionar todo.</p></div>
+    </div>
+  </div>
+</section>
 
-    <div class="beneficios-grid reveal">
-      <div class="benefit-card">
-        <div class="benefit-icon">+</div>
-        <h4>Mas leads calificados</h4>
-        <p>Funnels y landing pages que capturan clientes las 24 horas, aunque no estes trabajando.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon">A</div>
-        <h4>Negocio en piloto automatico</h4>
-        <p>Seguimientos, recordatorios y ventas funcionando solos. Menos operacion, mas resultados.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon">$</div>
-        <h4>Menos gastos, mas margen</h4>
-        <p>Un solo pago mensual reemplaza todo lo que pagas por separado. La diferencia es ganancia pura.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon">&gt;</div>
-        <h4>Clientes mejor atendidos</h4>
-        <p>Responde rapido, agenda facil y nunca pierdas un lead. Todo desde el celular.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon">^</div>
-        <h4>Escala cuando quieras</h4>
-        <p>La plataforma crece con vos. No necesitas cambiar de sistema cuando tu negocio crece.</p>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon">*</div>
-        <h4>Todo conectado</h4>
-        <p>CRM, agenda, marketing y pagos hablando entre si. Un solo lugar para gestionar todo.</p>
+<!-- INGRESOS EXTRA -->
+<section class="sec" style="padding-top:0" id="ingresos">
+  <div class="wrap">
+    <div class="s-tag gold reveal">Genera mas ingresos</div>
+    <h2 class="s-h reveal">No solo para tu negocio.<br><span style="color:var(--gold)">Tambien para vender.</span></h2>
+    <p class="s-sub reveal">Con GHL podes ofrecer servicios profesionales a cualquier negocio — sin ser experto, sin invertir en otras herramientas. Vos pones el precio.</p>
+
+    <div class="ing-banner reveal">
+      <h3>Con una sola suscripcion de $97/mes<br><span>podes construir un negocio de servicios completo.</span></h3>
+      <p>Cada servicio que ofreces con GHL es ingreso extra. Vos decides cuanto cobras.</p>
+    </div>
+
+    <div class="serv-grid reveal">
+      <div class="serv-card"><div class="serv-badge">Alta demanda</div><h4>Sitios web profesionales</h4><p>Construidos con GHL en dias. Entregados a tu precio.</p></div>
+      <div class="serv-card"><div class="serv-badge">Convierte mucho</div><h4>Landing pages</h4><p>Para cualquier negocio que quiera captar clientes online.</p></div>
+      <div class="serv-card"><div class="serv-badge">E-commerce</div><h4>Tiendas online</h4><p>Listas para vender productos fisicos y digitales.</p></div>
+      <div class="serv-card"><div class="serv-badge">Recurrente</div><h4>Automatizaciones</h4><p>Configura una vez, cobra todos los meses por el mantenimiento.</p></div>
+      <div class="serv-card"><div class="serv-badge">Muy pedido</div><h4>Gestion de clientes CRM</h4><p>Todo negocio necesita un CRM. Vos se lo armas y configuras.</p></div>
+      <div class="serv-card"><div class="serv-badge">Mensual</div><h4>Email y SMS marketing</h4><p>Campanas para restaurantes, tiendas, profesionales y mas.</p></div>
+    </div>
+
+    <div class="ing-close reveal">GHL te da la herramienta. Vos pones el precio.</div>
+  </div>
+</section>
+
+<!-- DOBLE GANANCIA -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="doble-wrap reveal">
+      <div class="s-tag gold">El resumen</div>
+      <h2 class="s-h" style="margin-top:16px">Una sola plataforma.<br><span style="color:var(--green)">Dos formas de ganar.</span></h2>
+      <div class="doble-grid">
+        <div class="d-card gc">
+          <h4 class="g">Para tu negocio</h4>
+          <p>Unifica todo, automatiza y escala sin pagar de mas.</p>
+          <ul class="d-list"><li>CRM y gestion de clientes</li><li>Marketing automatizado</li><li>Agenda y turnos online</li><li>Funnels y paginas de venta</li><li>Pagos integrados</li></ul>
+        </div>
+        <div class="d-card yc">
+          <h4 class="y">Para tus clientes</h4>
+          <p>Ofrece servicios y genera ingresos extra recurrentes.</p>
+          <ul class="d-list y"><li>Diseno de sitios web</li><li>Landing pages a pedido</li><li>Tiendas y e-commerce</li><li>Automatizaciones y CRM</li><li>Campanas de email y SMS</li></ul>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- AUTONOMIA -->
-<section class="autonomia">
-  <div class="autonomia-inner">
-    <div>
-      <div class="section-tag reveal" style="background:rgba(100,110,255,0.08);border-color:rgba(100,110,255,0.25);color:#9aa5ff;">Tu independencia</div>
-      <h2 class="section-h reveal">Manejas todo<br>desde un solo lugar.<br><span style="color:var(--green)">Sin depender<br>de nadie.</span></h2>
-      <p class="section-sub reveal">Tu negocio en piloto automatico, vos enfocado en crecer.</p>
-      <div class="autonomia-list reveal">
-        <div class="auto-item">
-          <div class="auto-dot">1</div>
-          <div>
-            <h5>Tu negocio trabaja solo</h5>
-            <p>Seguimientos, recordatorios y ventas automatizadas sin que hagas nada.</p>
-          </div>
-        </div>
-        <div class="auto-item">
-          <div class="auto-dot">2</div>
-          <div>
-            <h5>Nunca pierdas un cliente</h5>
-            <p>El CRM centraliza todo — contactos, historial y estado de cada lead en un lugar.</p>
-          </div>
-        </div>
-        <div class="auto-item">
-          <div class="auto-dot">3</div>
-          <div>
-            <h5>Mas tiempo para lo que importa</h5>
-            <p>Menos operacion diaria, mas energia para estrategia y crecimiento real.</p>
-          </div>
-        </div>
-        <div class="auto-item">
-          <div class="auto-dot">4</div>
-          <div>
-            <h5>Escala sin cambiar de sistema</h5>
-            <p>La plataforma crece con vos, sin migraciones ni dolores de cabeza.</p>
-          </div>
+<section class="sec">
+  <div class="wrap">
+    <div class="auto-wrap">
+      <div>
+        <div class="s-tag blue reveal">Tu independencia</div>
+        <h2 class="s-h reveal">Manejas todo desde<br>un solo lugar.<br><span style="color:var(--green)">Sin depender<br>de nadie.</span></h2>
+        <p class="s-sub reveal">Tu negocio en piloto automatico, vos enfocado en crecer y generar mas.</p>
+        <div class="auto-list reveal">
+          <div class="auto-item"><div class="auto-n">1</div><div><h5>Tu negocio trabaja solo</h5><p>Seguimientos, recordatorios y ventas automatizadas sin nada manual.</p></div></div>
+          <div class="auto-item"><div class="auto-n">2</div><div><h5>Nunca pierdas un cliente</h5><p>CRM centralizado — contactos, historial y estado de cada lead en un lugar.</p></div></div>
+          <div class="auto-item"><div class="auto-n">3</div><div><h5>Mas tiempo para lo que importa</h5><p>Menos operacion diaria, mas energia para crecer y ofrecer servicios.</p></div></div>
+          <div class="auto-item"><div class="auto-n">4</div><div><h5>Escala sin cambiar de sistema</h5><p>La plataforma crece con vos sin migraciones ni dolores de cabeza.</p></div></div>
         </div>
       </div>
-    </div>
-    <div class="autonomia-visual reveal">
-      <div class="big-statement">
-        Tu negocio<br>puede funcionar<br>solo, crecer y<br>generar<br><em>mas ingresos.</em>
+      <div class="auto-visual reveal">
+        <div class="big-stmt">Tu negocio<br>puede funcionar<br>solo, crecer y<br>generar<br><em>mas ingresos.</em></div>
+        <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="btn-green" style="font-size:16px;padding:16px 32px">Empeza gratis →</a>
       </div>
-      <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="btn-primary" style="display:inline-flex;font-size:16px;padding:16px 32px;">
-        Empeza gratis →
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- INGRESOS EXTRA -->
-<section class="ingresos">
-  <div class="ingresos-inner">
-    <div class="section-tag gold reveal">Genera mas ingresos</div>
-    <h2 class="section-h reveal">No necesitas ser experto.<br><span style="color:var(--green)">Solo necesitas GHL.</span></h2>
-    <p class="section-sub reveal">Ofrece estos servicios a tus clientes y cobra lo que quieras:</p>
-
-    <div class="ingresos-grid reveal">
-      <div class="ingreso-card">
-        <h4>Sitios web profesionales</h4>
-        <p>Entregados en dias, no en semanas.</p>
-      </div>
-      <div class="ingreso-card">
-        <h4>Landing pages</h4>
-        <p>Para cualquier negocio o producto.</p>
-      </div>
-      <div class="ingreso-card">
-        <h4>Tiendas online</h4>
-        <p>E-commerce listo para vender.</p>
-      </div>
-      <div class="ingreso-card">
-        <h4>Automatizaciones</h4>
-        <p>Seguimientos y ventas en piloto automatico.</p>
-      </div>
-      <div class="ingreso-card">
-        <h4>Gestion de clientes (CRM)</h4>
-        <p>El sistema que todo negocio necesita.</p>
-      </div>
-    </div>
-
-    <div class="ingresos-closing reveal">
-      GHL te da la herramienta. Vos pones el precio.
     </div>
   </div>
 </section>
 
 <!-- CTA FINAL -->
-<section class="cta-section">
+<section class="cta-sec">
   <div class="cta-inner">
     <h2 class="reveal">14 dias<br><span>GRATIS</span><br>para probarlo.</h2>
-    <p class="reveal">Sin contratos. Sin sorpresas. Todo lo que necesitas para crecer en un solo lugar.</p>
-
-    <div class="cta-value reveal">
-      <strong>Todo tu negocio + ingresos extra = $97/mes</strong>
-    </div>
-
-    <div class="cta-btn-wrap reveal">
-      <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="btn-huge">
-        <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        Empeza gratis ahora
-      </a>
-      <div class="cta-dm">Tenes dudas? <a href="https://instagram.com" target="_blank">Escribime por DM</a> — respondo rapido.</div>
+    <p class="reveal">Sin contratos. Sin sorpresas.<br>Tu negocio + ingresos extra desde un solo lugar.</p>
+    <div class="cta-val reveal"><strong>Todo tu negocio + servicios para clientes = $97/mes</strong></div>
+    <div class="cta-btns reveal">
+      <a href="https://www.gohighlevel.com/pro-trial?fp_ref=x3eu3" target="_blank" class="btn-huge">Empeza gratis ahora →</a>
+      <div class="cta-dm">Tenes dudas? <a href="https://instagram.com/miguelalerta" target="_blank">Escribime por DM</a> — respondo rapido.</div>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <div class="foot-logo">GoHighLevel</div>
-  <div>Enlace de afiliado — resultados pueden variar</div>
+  <div>Enlace de afiliado — resultados pueden variar segun cada caso</div>
 </footer>
 
 <script>
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 60);
-      }
-    });
-  }, { threshold: 0.1 });
-  reveals.forEach(el => observer.observe(el));
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*55)});
+  },{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
 </body>
 </html>
